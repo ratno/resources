@@ -468,16 +468,20 @@ class Column
         }
 
         if($this->column_title){
-            $return[] = "title(". $this->column_title .")";
+            $return[] = "title('". $this->column_title ."')";
         }
         if($this->column_required) {
             $return[] = "required()";
         }
         if($this->column_default) {
-            $return[] = "defaultvalue(". $this->column_default .")";
+            if(is_numeric($this->column_default)) {
+                $return[] = "defaultvalue(". $this->column_default .")";
+            } else {
+                $return[] = "defaultvalue('". $this->column_default ."')";
+            }
         }
         if($this->column_comment) {
-            $return[] = "comment(". $this->column_comment .")";
+            $return[] = "comment('". $this->column_comment ."')";
         }
 
         // file
