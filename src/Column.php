@@ -457,7 +457,8 @@ class Column
 
         // foreign key
         if($this->column_foreign_key) {
-            $return[] = "foreignKey(". $this->column_foreign_key .")";
+            $str_foreign_key = $this->column_foreign_key . "::class";
+            $return[] = "foreignKey(". $str_foreign_key .")";
         }
         if($this->column_foreign_key_cascade){
             $return[] = "fkCascade()";
@@ -497,10 +498,18 @@ class Column
         }
 
         if($this->column_chain_to) {
-            $return[] = "chain_to(".json_encode($this->column_chain_to).")";
+            $str_chain_to = [];
+            foreach($this->column_chain_to as $item_chain_to) {
+                $str_chain_to[] = "self::" . strtoupper($item_chain_to);
+            }
+            $return[] = "chain_to([".implode(",",$str_chain_to)."])";
         }
         if($this->column_chain_from) {
-            $return[] = "chain_from(".json_encode($this->column_chain_from).")";
+            $str_chain_from = [];
+            foreach($this->column_chain_from as $item_chain_from) {
+                $str_chain_from[] = "self::" . strtoupper($item_chain_from);
+            }
+            $return[] = "chain_from([".implode(",",$str_chain_from)."])";
         }
 
         if(!$this->column_filter_visible) {
