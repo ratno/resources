@@ -424,7 +424,7 @@ class Column
                 if($this->auto_increment && $this->primaryKey() && $this->unsigned()) {
                     $return[] = "increment()";
                 } else {
-                    $return[] = "bigint(". $this->size .")";
+                    $return[] = "int(". $this->size .")";
                     if($this->column_primary_key) {
                         $return[] = "primaryKey()";
                     }
@@ -575,4 +575,11 @@ class Column
 
         return implode("->",$return);
     }
+
+    public function __toString()
+    {
+        return $this->toString();
+    }
+
+
 }
