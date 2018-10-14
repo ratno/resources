@@ -22,6 +22,7 @@ class Column
     public $column_unique;
 
     public $column_title;
+    public $column_default;
     public $column_required = false;
     public $column_unsigned;
     public $column_comment;
@@ -63,12 +64,6 @@ class Column
         $this->real_column = $real_column;
     }
 
-    public function boolean() : Column
-    {
-        $this->cast = "boolean";
-        return $this->dataType("tinyint", 1);
-    }
-
     public function dataType($name, $size = null, $scale = null) : Column
     {
         $this->type = $name;
@@ -95,6 +90,12 @@ class Column
     public function varchar($size = 191) : Column
     {
         return $this->dataType("varchar", $size);
+    }
+
+    public function boolean() : Column
+    {
+        $this->cast = "boolean";
+        return $this->dataType("tinyint", 1);
     }
 
     public function date() : Column
@@ -349,7 +350,7 @@ class Column
         return $this;
     }
 
-    public function form_radio() : Column
+    public function radio() : Column
     {
         $this->column_radio = true;
         return $this;
@@ -361,8 +362,7 @@ class Column
         return $this;
     }
 
-
-    function toArray()
+    public function toArray()
     {
         $clone = (array)$this;
         $rtn = [];
@@ -374,5 +374,192 @@ class Column
         }
 
         return $rtn;
+    }
+
+    public function toString()
+    {
+        $return = [];
+
+        // real column or not
+        if($this->real_column) {
+            $return[] = "col()";
+        } else {
+            $return[] = "col(false)";
+        }
+
+        // data type
+        switch ($this->type) {
+            case "char":
+                $return[] = "char(". ($this->size ?: 191).")";
+                break;
+            case "varchar":
+                $return[] = "string(". ($this->size ?: 191).")";
+                break;
+            case "text":
+                $this->cast = "array";
+                $this->column_json = true;
+                if($this->column_json) {
+                    $return[] = "jsonText()";
+                } else {
+                    $return[] = "text()";
+                }
+                break;
+            case "decimal":
+                $return[] = "decimal(". $this->size .",". $this->scale .")";
+                break;
+            case "biginteger":
+                if($this->auto_increment && $this->column_primary_key && $this->column_unsigned) {
+                    $return[] = "bigIncrement()";
+                } else {
+                    $return[] = "bigint(". $this->size .")";
+                    if($this->column_primary_key) {
+                        $return[] = "primaryKey()";
+                    }
+                    if($this->column_unsigned) {
+                        $return[] = "unsigned()";
+                    }
+                }
+                break;
+            case "integer":
+                if($this->auto_increment && $this->primaryKey() && $this->unsigned()) {
+                    $return[] = "increment()";
+                } else {
+                    $return[] = "bigint(". $this->size .")";
+                    if($this->column_primary_key) {
+                        $return[] = "primaryKey()";
+                    }
+                    if($this->column_unsigned) {
+                        $return[] = "unsigned()";
+                    }
+                }
+                break;
+            case "tinyint":
+                $return[] = "boolean()";
+                break;
+            case "date":
+                $return[] = "date()";
+                break;
+            case "datetime":
+                $return[] = "dateTime()";
+                break;
+            case "time":
+                $return[] = "time()";
+                break;
+        }
+
+        // index
+        if($this->column_index) {
+            $return[] = "index()";
+        }
+        if($this->column_unique) {
+            $return[] = "unique()";
+        }
+
+        // foreign key
+        if($this->column_foreign_key) {
+            $return[] = "foreignKey(". $this->column_foreign_key .")";
+        }
+        if($this->column_foreign_key_cascade){
+            $return[] = "fkCascade()";
+        }
+        if($this->column_foreign_key_setnull){
+            $return[] = "fkSetNull()";
+        }
+
+        if($this->column_title){
+            $return[] = "title(". $this->column_title .")";
+        }
+        if($this->column_required) {
+            $return[] = "required()";
+        }
+        if($this->column_default) {
+            $return[] = "defaultvalue(". $this->column_default .")";
+        }
+        if($this->column_comment) {
+            $return[] = "comment(". $this->column_comment .")";
+        }
+
+        // file
+        if($this->column_file) {
+            switch($this->column_file_type) {
+                case "image":
+                    if($this->column_avatar) {
+                        $return[] = "avatar()";
+                    } else {
+                        $return[] = "image()";
+                    }
+                    break;
+                case "all":
+                default:
+                    $return[] = "file()";
+
+            }
+        }
+
+        if($this->column_chain_to) {
+            $return[] = "chain_to(".json_encode($this->column_chain_to).")";
+        }
+        if($this->column_chain_from) {
+            $return[] = "chain_from(".json_encode($this->column_chain_from).")";
+        }
+
+        if(!$this->column_filter_visible) {
+            $return[] = "filter_hide()";
+        }
+        if(!$this->column_grid_visible) {
+            $return[] = "grid_hide()";
+        }
+        if(!$this->column_form_visible) {
+            $return[] = "form_hide()";
+        }
+        if(!$this->column_detail_visible) {
+            $return[] = "detail_hide()";
+        }
+        if(!$this->column_model_visible) {
+            $return[] = "model_hide()";
+        }
+
+        if($this->column_grid_width) {
+            $return[] = "grid_width(".$this->column_grid_width.")";
+        }
+        if($this->column_grid_fixed) {
+            $return[] = "grid_fixed()";
+        }
+
+        if($this->column_max_length) {
+            $return[] = "max_length(". $this->column_max_length .")";
+        }
+        if($this->column_min_length) {
+            $return[] = "min_length(". $this->column_min_length .")";
+        }
+        if($this->column_max_value) {
+            $return[] = "max_value(". $this->column_max_value .")";
+        }
+        if($this->column_min_value) {
+            $return[] = "min_value(". $this->column_min_value .")";
+        }
+        if($this->column_alpha) {
+            $return[] = "alpha()";
+        }
+        if($this->column_alpha_num) {
+            $return[] = "alpha_num()";
+        }
+        if($this->column_num) {
+            $return[] = "num()";
+        }
+        if($this->column_email) {
+            $return[] = "email()";
+        }
+        if($this->column_autocomplete) {
+            $return[] = "autocomplete()";
+        }
+        if($this->column_radio) {
+            $return[] = "radio()";
+        }
+        if($this->column_password) {
+            $return[] = "password()";
+        }
+
+        return implode("->",$return);
     }
 }
