@@ -29,7 +29,6 @@ abstract class Resource {
                     } else {
                         $return[] = $field_data->$value_return;
                     }
-
                 }
             }
         }
@@ -48,7 +47,7 @@ abstract class Resource {
 
     public function getDependency()
     {
-        return $this->getFieldsVar("foreign_key","foreign_key");
+        return $this->getFieldsVar("column_foreign_key","column_foreign_key");
     }
 
     public function subtitle() : string
