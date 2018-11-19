@@ -125,7 +125,7 @@ class Column
     {
         $this->cast = "array";
         $this->column_json = true;
-        return $this->dataType("text");
+        return $this->text();
     }
 
     public function bigIncrement() : Column
@@ -396,9 +396,7 @@ class Column
                 $return[] = "string(". ($this->size ?: 191).")";
                 break;
             case "text":
-                $this->cast = "array";
-                $this->column_json = true;
-                if($this->column_json) {
+                if($this->column_json && $this->cast == "array") {
                     $return[] = "jsonText()";
                 } else {
                     $return[] = "text()";
