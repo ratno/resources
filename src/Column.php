@@ -471,7 +471,7 @@ class Column
         if($this->column_required) {
             $return[] = "required()";
         }
-        if($this->column_default) {
+        if($this->column_default || is_numeric($this->column_default)) {
             if(is_numeric($this->column_default)) {
                 $return[] = "defaultvalue(". $this->column_default .")";
             } else {
