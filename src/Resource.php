@@ -4,6 +4,9 @@ namespace Ratno\Resources;
 
 abstract class Resource {
 
+    const MORPH_MANY = "morphMany";
+    const MORPH_TO_MANY = "morphToMany";
+
     abstract public function tablename() : string;
     abstract public function fields() : array;
 
@@ -76,6 +79,29 @@ abstract class Resource {
 
     public function insertdata() : array
     {
+        return [];
+    }
+
+    public function pivotTable() : bool
+    {
+        return false;
+    }
+
+    public function morphTable() : bool
+    {
+        return false;
+    }
+
+    public function morphReverseReference() : array
+    {
+        /* contoh:
+         *
+         * return [
+         *      [Resource::MORPH_MANY, CLASSNAME, MORPH_COLUMN_ID],
+         *      [Resource::MORPH_TO_MANY, CLASSNAME, MORPH_COLUMN_ID]
+         * ];
+         *
+         */
         return [];
     }
 }
