@@ -28,9 +28,9 @@ abstract class Resource {
             foreach($fields as $key => $field_data) {
                 if($field_data->$varname) {
                     if($value_return == "key") {
-                        $return[] = $key;
+                        $return[$key] = $key;
                     } else {
-                        $return[] = $field_data->$value_return;
+                        $return[$key] = $field_data->$value_return;
                     }
                 }
             }
