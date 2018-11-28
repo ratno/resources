@@ -97,8 +97,8 @@ abstract class Resource {
         /* contoh:
          *
          * return [
-         *      [Resource::MORPH_MANY, CLASSNAME, MORPH_COLUMN_ID],
-         *      [Resource::MORPH_TO_MANY, CLASSNAME, MORPH_COLUMN_ID]
+         *      [Resource::MORPH_MANY, MORPH_COLUMN_TYPE => CLASSNAME_ARRAY],
+         *      [Resource::MORPH_TO_MANY, MORPH_COLUMN_TYPE => CLASSNAME_ARRAY]
          * ];
          *
          */
