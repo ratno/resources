@@ -53,26 +53,22 @@ abstract class Resource {
     {
         return [
             ResourceConstant::DELETED_AT => col()->timestamp(),
-            ResourceConstant::RESTORED_AT => col()->timestamp(),
         ];
     }
 
-    protected function getSaveActorFields() : array
+    public function getSaveActorFields() : array
     {
         $fields = [];
 
         if($this->timestamps()) {
-            $fields[] = [
-                ResourceConstant::CREATED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Created By'),
-                ResourceConstant::UPDATED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Updated By'),
-            ];
+            $fields[ResourceConstant::CREATED_BY_ID] = col()->int(11)->index()->foreignKey($this->actorclass())->title('Created By');
+            $fields[ResourceConstant::UPDATED_BY_ID] = col()->int(11)->index()->foreignKey($this->actorclass())->title('Updated By');
         }
 
         if($this->softdelete()) {
-            $fields[] = [
-                ResourceConstant::DELETED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Deleted By'),
-                ResourceConstant::RESTORED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Restored By'),
-            ];
+            $fields[ResourceConstant::DELETED_BY_ID] = col()->int(11)->index()->foreignKey($this->actorclass())->title('Deleted By');
+            $fields[ResourceConstant::RESTORED_AT] = col()->timestamp();
+            $fields[ResourceConstant::RESTORED_BY_ID] = col()->int(11)->index()->foreignKey($this->actorclass())->title('Restored By');
         }
 
         return $fields;
