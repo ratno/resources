@@ -6,6 +6,7 @@ abstract class Resource {
 
     const MORPH_MANY = "morphMany";
     const MORPH_TO_MANY = "morphToMany";
+    const MORPHED_BY_MANY = "morphedByMany";
 
     const CREATED_AT = "created_at";
     const UPDATED_AT = "updated_at";
@@ -87,7 +88,7 @@ abstract class Resource {
                 self::RESTORED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Restored By'),
             ];
         }
-        
+
         return $fields;
     }
 
@@ -174,5 +175,15 @@ abstract class Resource {
          *
          */
         return [];
+    }
+
+    public function morphReverseReferenceCreate($type, $column_type_name, $reference, $mtm_table = null,
+                                                $mtm_target_class = null, $mtm_target_id_column = null) : array
+    {
+        if($mtm_target_class) {
+            return compact("type","column_type_name", "reference", "mtm_table", "mtm_target_class","mtm_target_id_column");
+        } else {
+            return compact("type","column_type_name", "reference");
+        }
     }
 }
