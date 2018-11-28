@@ -4,20 +4,6 @@ namespace Ratno\Resources;
 
 abstract class Resource {
 
-    const MORPH_MANY = "morphMany";
-    const MORPH_TO_MANY = "morphToMany";
-    const MORPHED_BY_MANY = "morphedByMany";
-
-    const CREATED_AT = "created_at";
-    const UPDATED_AT = "updated_at";
-    const DELETED_AT = "deleted_at";
-    const RESTORED_AT = "restored_at";
-
-    const CREATED_BY_ID = "created_by_id";
-    const UPDATED_BY_ID = "updated_by_id";
-    const DELETED_BY_ID = "deleted_by_id";
-    const RESTORED_BY_ID = "restored_by_id";
-
     abstract public function tablename() : string;
     abstract public function fields() : array;
 
@@ -58,16 +44,16 @@ abstract class Resource {
     protected function getTimestampsFields() : array
     {
         return [
-            self::CREATED_AT => col()->timestamp(),
-            self::UPDATED_AT => col()->timestamp(),
+            ResourceConstant::CREATED_AT => col()->timestamp(),
+            ResourceConstant::UPDATED_AT => col()->timestamp(),
         ];
     }
 
     protected function getSoftdeleteFields() : array
     {
         return [
-            self::DELETED_AT => col()->timestamp(),
-            self::RESTORED_AT => col()->timestamp(),
+            ResourceConstant::DELETED_AT => col()->timestamp(),
+            ResourceConstant::RESTORED_AT => col()->timestamp(),
         ];
     }
 
@@ -77,15 +63,15 @@ abstract class Resource {
 
         if($this->timestamps()) {
             $fields[] = [
-                self::CREATED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Created By'),
-                self::UPDATED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Updated By'),
+                ResourceConstant::CREATED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Created By'),
+                ResourceConstant::UPDATED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Updated By'),
             ];
         }
 
         if($this->softdelete()) {
             $fields[] = [
-                self::DELETED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Deleted By'),
-                self::RESTORED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Restored By'),
+                ResourceConstant::DELETED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Deleted By'),
+                ResourceConstant::RESTORED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Restored By'),
             ];
         }
 
