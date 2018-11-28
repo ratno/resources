@@ -583,10 +583,95 @@ class Column
         return implode("->",$return);
     }
 
+    public function toLaravelMigration($column_name)
+    {
+        $return = [];
+
+        // real column or not
+        if(!$this->real_column) {
+            return "";
+        } else {
+            $return[] = '$table';
+        }
+
+        // data type
+        switch ($this->type) {
+            case "char":
+                $return[] = "char('$column_name',". ($this->size ?: 191).")";
+                break;
+            case "varchar":
+                $return[] = "string('$column_name',". ($this->size ?: 191).")";
+                break;
+            case "text":
+                if($this->column_json && $this->cast == "array") {
+                    $return[] = "json('$column_name')";
+                } else {
+                    $return[] = "text('$column_name')";
+                }
+                break;
+            case "decimal":
+                $return[] = "decimal('$column_name',". $this->size .",". $this->scale .")";
+                break;
+            case "biginteger":
+                if($this->auto_increment && $this->column_primary_key && $this->column_unsigned) {
+                    $this->column_required = true;
+                    $return[] = "bigIncrements('$column_name')";
+                } else {
+                    $return[] = "bigInteger('$column_name')";
+                    if($this->column_unsigned) {
+                        $return[] = "unsigned()";
+                    }
+                }
+                break;
+            case "integer":
+                if($this->auto_increment && $this->primaryKey() && $this->unsigned()) {
+                    $this->column_required = true;
+                    $return[] = "increments('$column_name')";
+                } else {
+                    $return[] = "integer('$column_name')";
+                    if($this->column_unsigned) {
+                        $return[] = "unsigned()";
+                    }
+                }
+                break;
+            case "tinyint":
+                $return[] = "boolean('$column_name')";
+                break;
+            case "date":
+                $return[] = "date('$column_name')";
+                break;
+            case "datetime":
+                $return[] = "dateTime('$column_name')";
+                break;
+            case "time":
+                $return[] = "time('$column_name')";
+                break;
+            case "timestamp":
+                $return[] = "timestamp('$column_name')";
+                break;
+        }
+
+        if(!$this->column_required) {
+            $return[] = "nullable()";
+        }
+
+        if($this->column_default || is_numeric($this->column_default)) {
+            if(is_numeric($this->column_default)) {
+                $return[] = "default(". $this->column_default .")";
+            } else {
+                $return[] = "default('". $this->column_default ."')";
+            }
+        }
+
+        if($this->column_comment) {
+            $return[] = "comment('". $this->column_comment ."')";
+        }
+
+        return implode("->",$return);
+    }
+
     public function __toString()
     {
         return $this->toString();
     }
-
-
 }
