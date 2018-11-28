@@ -116,6 +116,12 @@ class Column
         return $this->dataType("time");
     }
 
+    public function timestamp() : Column
+    {
+        $this->cast = "timestamp";
+        return $this->dataType("timestamp");
+    }
+
     public function decimal($size, $scale = 0) : Column
     {
         return $this->dataType("decimal", $size, $scale);
@@ -442,6 +448,9 @@ class Column
                 break;
             case "time":
                 $return[] = "time()";
+                break;
+            case "timestamp":
+                $return[] = "timestamp()";
                 break;
         }
 
