@@ -720,6 +720,40 @@ class Column
         }
     }
 
+    public function getVariabelType()
+    {
+        $variableType = "";
+        switch ($this->type) {
+            case "char":
+            case "varchar":
+            case "text":
+                if($this->column_json && $this->cast == "array") {
+                    $variableType = "array";
+                } else {
+                    $variableType = "string";
+                }
+                break;
+            case "decimal":
+                $variableType = "double";
+                break;
+            case "biginteger":
+            case "integer":
+                $variableType = "integer";
+                break;
+            case "tinyint":
+                $variableType = "boolean";
+                break;
+            case "date":
+            case "datetime":
+            case "time":
+            case "timestamp":
+                $variableType = "\Carbon\Carbon";
+                break;
+        }
+
+        return $variableType;
+    }
+
     public function __toString()
     {
         return $this->toString();
