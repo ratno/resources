@@ -689,16 +689,8 @@ class Column
             $return[] = "comment('". $this->column_comment ."')";
         }
 
-        if($this->column_index) {
-            $return[] = "index()";
-        }
-
         if($this->column_primary_key && !$pk_definition_flag) {
             $return[] = "primary()";
-        }
-
-        if($this->column_unique) {
-            $return[] = "unique()";
         }
 
         return implode("->",$return);
