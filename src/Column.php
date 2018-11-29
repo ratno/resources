@@ -674,12 +674,12 @@ class Column
     {
         // foreign key
         if($this->column_foreign_key) {
-            $str_foreign_key = str_replace("Semar","Models",$this->column_foreign_key) . "::class";
+            $str_foreign_key = ($this->column_foreign_key)::TABLENAME;
             $return = [];
             $return[] = '$table';
             $return[] = "foreign('". $column_name ."')";
             $return[] = "references('id')";
-            $return[] = "on($str_foreign_key)";
+            $return[] = "on('$str_foreign_key')";
             if($this->column_foreign_key_cascade) {
                 $return[] = "onUpdate('cascade')";
                 $return[] = "onDelete('cascade')";
