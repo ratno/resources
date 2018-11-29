@@ -77,7 +77,7 @@ abstract class Resource {
     public function getFieldsVar($varname,$value_return="key") : array
     {
         $return = [];
-        $fields = $this->fields();
+        $fields = $this->getAllFields();
         if(is_array($fields) && count($fields)) {
             foreach($fields as $key => $field_data) {
                 if($field_data->$varname) {
