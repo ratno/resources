@@ -583,11 +583,19 @@ class Column
         return implode("->",$return);
     }
 
-    public function toLaravelMigration($column_name)
+    public function toLaravelMigration($column_name) : array
     {
         $return = [];
-        $return[] = $this->toLaravelFieldDefinition($column_name);
-        $return[] = $this->toLaravelForeignKey($column_name);
+
+        $field_definition = $this->toLaravelFieldDefinition($column_name);
+        if($field_definition) {
+            $return[] = $field_definition;
+        }
+
+        $foreignkey_definition = $this->toLaravelForeignKey($column_name);
+        if($foreignkey_definition) {
+            $return[] = $foreignkey_definition;
+        }
 
         return $return;
     }
@@ -711,7 +719,7 @@ class Column
             }
             return implode("->",$return);
         } else {
-            return "";
+            return null;
         }
     }
 
