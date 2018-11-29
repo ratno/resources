@@ -586,6 +586,15 @@ class Column
     public function toLaravelMigration($column_name)
     {
         $return = [];
+        $return[] = $this->toLaravelFieldDefinition($column_name);
+        $return[] = $this->toLaravelForeignKey($column_name);
+
+        return $return;
+    }
+
+    protected function toLaravelFieldDefinition($column_name)
+    {
+        $return = [];
 
         // real column or not
         if(!$this->real_column) {
@@ -618,7 +627,7 @@ class Column
                     $return[] = "bigIncrements('$column_name')";
                 } else {
                     $return[] = "bigInteger('$column_name')";
-                    if($this->column_unsigned) {
+                    if($this->column_unsigned || $this->column_foreign_key) {
                         $return[] = "unsigned()";
                     }
                 }
@@ -629,7 +638,7 @@ class Column
                     $return[] = "increments('$column_name')";
                 } else {
                     $return[] = "integer('$column_name')";
-                    if($this->column_unsigned) {
+                    if($this->column_unsigned || $this->column_foreign_key) {
                         $return[] = "unsigned()";
                     }
                 }
@@ -667,10 +676,22 @@ class Column
             $return[] = "comment('". $this->column_comment ."')";
         }
 
+        if($this->column_index) {
+            $return[] = "index()";
+        }
+
+        if($this->column_primary_key) {
+            $return[] = "primary()";
+        }
+
+        if($this->column_unique) {
+            $return[] = "unique()";
+        }
+
         return implode("->",$return);
     }
 
-    public function toLaravelForeignKey($column_name)
+    protected function toLaravelForeignKey($column_name)
     {
         // foreign key
         if($this->column_foreign_key) {
