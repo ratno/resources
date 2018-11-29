@@ -674,7 +674,7 @@ class Column
     {
         // foreign key
         if($this->column_foreign_key) {
-            $str_foreign_key = str_replace("Semar","Models",$this->column_foreign_key) . "::class";
+            $str_foreign_key = $this->column_foreign_key . "::class";
             $return = [];
             $return[] = '$table';
             $return[] = "foreign('". $column_name ."')";
