@@ -720,7 +720,7 @@ class Column
         }
     }
 
-    public function getVariabelType()
+    public function getVariabelType() : string
     {
         $variableType = "";
         switch ($this->type) {

@@ -5,6 +5,10 @@ namespace Ratno\Resources;
 abstract class Resource {
 
     abstract public function tablename() : string;
+
+    /**
+     * @return \Ratno\Resources\Column[]
+     */
     abstract public function fields() : array;
 
     public function title() : string
@@ -22,6 +26,9 @@ abstract class Resource {
         return \App\Semar\Users::class;
     }
 
+    /**
+     * @return \Ratno\Resources\Column[]
+     */
     public function getAllFields() : array
     {
         $fields = $this->fields();
