@@ -165,6 +165,7 @@ class Column
     public function primaryKey() : Column
     {
         $this->column_primary_key = true;
+        $this->column_required = true;
         return $this;
     }
 
@@ -425,7 +426,7 @@ class Column
                 }
                 break;
             case "integer":
-                if($this->auto_increment && $this->primaryKey() && $this->unsigned()) {
+                if($this->auto_increment && $this->column_primary_key && $this->column_unsigned) {
                     $return[] = "increment()";
                 } else {
                     $return[] = "int(". $this->size .")";
@@ -641,7 +642,7 @@ class Column
                 }
                 break;
             case "integer":
-                if($this->auto_increment && $this->primaryKey() && $this->unsigned()) {
+                if($this->auto_increment && $this->column_primary_key && $this->column_unsigned) {
                     $this->column_required = true;
                     $return[] = "increments('$column_name')";
                 } else {
