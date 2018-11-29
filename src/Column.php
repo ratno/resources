@@ -670,6 +670,30 @@ class Column
         return implode("->",$return);
     }
 
+    public function toLaravelForeignKey($column_name)
+    {
+        // foreign key
+        if($this->column_foreign_key) {
+            $str_foreign_key = str_replace("Semar","Models",$this->column_foreign_key) . "::class";
+            $return = [];
+            $return[] = '$table';
+            $return[] = "foreign('". $column_name ."')";
+            $return[] = "references('id')";
+            $return[] = "on($str_foreign_key)";
+            if($this->column_foreign_key_cascade) {
+                $return[] = "onUpdate('cascade')";
+                $return[] = "onDelete('cascade')";
+            }
+            if($this->column_foreign_key_setnull) {
+                $return[] = "onUpdate('set null')";
+                $return[] = "onDelete('set null')";
+            }
+            return implode("->",$return);
+        } else {
+            return "";
+        }
+    }
+
     public function __toString()
     {
         return $this->toString();
