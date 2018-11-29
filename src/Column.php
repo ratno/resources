@@ -612,6 +612,8 @@ class Column
             $return[] = '$table';
         }
 
+        $pk_definition_flag = false;
+
         // data type
         switch ($this->type) {
             case "char":
@@ -634,6 +636,7 @@ class Column
                 if($this->auto_increment && $this->column_primary_key && $this->column_unsigned) {
                     $this->column_required = true;
                     $return[] = "bigIncrements('$column_name')";
+                    $pk_definition_flag = true;
                 } else {
                     $return[] = "bigInteger('$column_name')";
                     if($this->column_unsigned || $this->column_foreign_key) {
@@ -645,6 +648,7 @@ class Column
                 if($this->auto_increment && $this->column_primary_key && $this->column_unsigned) {
                     $this->column_required = true;
                     $return[] = "increments('$column_name')";
+                    $pk_definition_flag = true;
                 } else {
                     $return[] = "integer('$column_name')";
                     if($this->column_unsigned || $this->column_foreign_key) {
@@ -689,7 +693,7 @@ class Column
             $return[] = "index()";
         }
 
-        if($this->column_primary_key) {
+        if($this->column_primary_key && !$pk_definition_flag) {
             $return[] = "primary()";
         }
 
