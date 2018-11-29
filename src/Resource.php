@@ -19,7 +19,7 @@ abstract class Resource {
 
     public function actorclass() : string
     {
-        return \App\Models\Users::class;
+        return \App\Semar\Users::class;
     }
 
     public function getAllFields() : array
