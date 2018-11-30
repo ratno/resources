@@ -21,6 +21,9 @@ class Column
     public $column_index;
     public $column_unique;
 
+    public $column_uuid = false;
+    public $column_id = false;
+
     public $column_title;
     public $column_default;
     public $column_required = false;
@@ -167,6 +170,19 @@ class Column
         $this->column_primary_key = true;
         $this->column_required = true;
         return $this;
+    }
+
+    public function id() : Column
+    {
+        $this->column_id = true;
+
+        return $this->model_hide()->grid_hide()->form_hide()->detail_hide();
+    }
+
+    public function uuid() : Column
+    {
+        $this->column_uuid = true;
+        return $this->char(36)->required()->model_hide()->grid_hide()->form_hide()->detail_hide();
     }
 
     public function unsigned() : Column
@@ -392,6 +408,14 @@ class Column
             $return[] = "col()";
         } else {
             $return[] = "col(false)";
+        }
+
+        if($this->column_uuid) {
+            $return[] = "uuid()";
+        }
+
+        if($this->column_id) {
+            $return[] = "id()";
         }
 
         // data type
