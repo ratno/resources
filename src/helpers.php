@@ -27,13 +27,23 @@ if(!function_exists("tab")) {
 }
 
 if(!function_exists("uniform_tab")) {
-    function uniform_tab($array, $uniform_tab_number)
+    function uniform_tab($arrayOrString, $uniform_tab_number)
     {
+        if(is_array($arrayOrString)) {
+            $array = $arrayOrString;
+        } else {
+            $array = explode("\n",$arrayOrString);
+        }
+
         $out = [];
         $idx = 0;
         if(is_array($array)) {
             foreach($array as $line) {
-                $out[] = tab($uniform_tab_number,$idx++) . $line;
+                if($uniform_tab_number < 0) {
+                    $out[] = preg_replace("/".str_repeat('\s',abs($uniform_tab_number)*4)."/","",$line,1);
+                } else {
+                    $out[] = tab($uniform_tab_number,$idx++) . $line;
+                }
             }
         }
 
