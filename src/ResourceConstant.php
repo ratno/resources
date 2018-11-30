@@ -12,6 +12,7 @@ namespace Ratno\Resources;
 class ResourceConstant
 {
     const MORPH_MANY = "morphMany";
+    const MORPH_TO = "morphTo";
     const MORPH_TO_MANY = "morphToMany";
     const MORPHED_BY_MANY = "morphedByMany";
 
