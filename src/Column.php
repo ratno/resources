@@ -382,7 +382,7 @@ class Column
     public function password() : Column
     {
         $this->column_password = true;
-        return $this;
+        return $this->max_length(30)->model_hide()->detail_hide()->grid_hide();
     }
 
     public function toArray()
