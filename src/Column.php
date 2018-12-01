@@ -70,6 +70,13 @@ class Column
     const TYPE_TIMESTAMP = "timestamp";
     const TYPE_DECIMAL = "decimal";
 
+    const VAR_STRING = "string";
+    const VAR_ARRAY = "array";
+    const VAR_DOUBLE = "double";
+    const VAR_INTEGER = "integer";
+    const VAR_BOOLEAN = "boolean";
+    const VAR_DATETIME = "\Carbon\Carbon";
+
     /**
      * Column constructor.
      * @param $real_column
@@ -764,26 +771,26 @@ class Column
             case Column::TYPE_VARCHAR:
             case Column::TYPE_TEXT:
                 if($this->column_json && $this->cast == "array") {
-                    $variableType = "array";
+                    $variableType = Column::VAR_ARRAY;
                 } else {
-                    $variableType = "string";
+                    $variableType = Column::VAR_STRING;
                 }
                 break;
             case Column::TYPE_DECIMAL:
-                $variableType = "double";
+                $variableType = Column::VAR_DOUBLE;
                 break;
             case Column::TYPE_BIGINT:
             case Column::TYPE_INT:
-                $variableType = "integer";
+                $variableType = Column::VAR_INTEGER;
                 break;
             case Column::TYPE_TINYINT:
-                $variableType = "boolean";
+                $variableType = Column::VAR_BOOLEAN;
                 break;
             case Column::TYPE_DATE:
             case Column::TYPE_DATETIME:
             case Column::TYPE_TIME:
             case Column::TYPE_TIMESTAMP:
-                $variableType = "\Carbon\Carbon";
+                $variableType = Column::VAR_DATETIME;
                 break;
         }
 
