@@ -58,6 +58,18 @@ class Column
     public $column_password = false;
     public $column_json = false;
 
+    const TYPE_CHAR = "char";
+    const TYPE_VARCHAR = "varchar";
+    const TYPE_TEXT = "text";
+    const TYPE_TINYINT = "tinyint";
+    const TYPE_INT = "integer";
+    const TYPE_BIGINT = "biginteger";
+    const TYPE_DATE = "date";
+    const TYPE_DATETIME = "datetime";
+    const TYPE_TIME = "time";
+    const TYPE_TIMESTAMP = "timestamp";
+    const TYPE_DECIMAL = "decimal";
+
     /**
      * Column constructor.
      * @param $real_column
@@ -77,12 +89,12 @@ class Column
 
     public function char($size = 191) : Column
     {
-        return $this->dataType("char", $size);
+        return $this->dataType(Column::TYPE_CHAR, $size);
     }
 
     public function text() : Column
     {
-        return $this->dataType("text");
+        return $this->dataType(Column::TYPE_TEXT);
     }
 
     public function string($size = 191) : Column
@@ -92,37 +104,37 @@ class Column
 
     public function varchar($size = 191) : Column
     {
-        return $this->dataType("varchar", $size);
+        return $this->dataType(Column::TYPE_VARCHAR, $size);
     }
 
     public function boolean() : Column
     {
         $this->cast = "boolean";
-        return $this->dataType("tinyint", 1);
+        return $this->dataType(Column::TYPE_TINYINT, 1);
     }
 
     public function date() : Column
     {
         $this->cast = "date";
-        return $this->dataType("date");
+        return $this->dataType(Column::TYPE_DATE);
     }
 
     public function dateTime() : Column
     {
         $this->cast = "datetime";
-        return $this->dataType("datetime");
+        return $this->dataType(Column::TYPE_DATETIME);
     }
 
     public function time() : Column
     {
         $this->cast = "timestamp";
-        return $this->dataType("time");
+        return $this->dataType(Column::TYPE_TIME);
     }
 
     public function timestamp() : Column
     {
         $this->cast = "timestamp";
-        return $this->dataType("timestamp");
+        return $this->dataType(Column::TYPE_TIMESTAMP);
     }
 
     public function decimal($size, $scale = 0) : Column
@@ -157,12 +169,12 @@ class Column
 
     public function bigint($size = 20) : Column
     {
-        return $this->dataType("biginteger", $size);
+        return $this->dataType(Column::TYPE_BIGINT, $size);
     }
 
     public function int($size = 11) : Column
     {
-        return $this->dataType("integer", $size);
+        return $this->dataType(Column::TYPE_INT, $size);
     }
 
     public function primaryKey() : Column
@@ -748,29 +760,29 @@ class Column
     {
         $variableType = "";
         switch ($this->type) {
-            case "char":
-            case "varchar":
-            case "text":
+            case Column::TYPE_CHAR:
+            case Column::TYPE_VARCHAR:
+            case Column::TYPE_TEXT:
                 if($this->column_json && $this->cast == "array") {
                     $variableType = "array";
                 } else {
                     $variableType = "string";
                 }
                 break;
-            case "decimal":
+            case Column::TYPE_DECIMAL:
                 $variableType = "double";
                 break;
-            case "biginteger":
-            case "integer":
+            case Column::TYPE_BIGINT:
+            case Column::TYPE_INT:
                 $variableType = "integer";
                 break;
-            case "tinyint":
+            case Column::TYPE_TINYINT:
                 $variableType = "boolean";
                 break;
-            case "date":
-            case "datetime":
-            case "time":
-            case "timestamp":
+            case Column::TYPE_DATE:
+            case Column::TYPE_DATETIME:
+            case Column::TYPE_TIME:
+            case Column::TYPE_TIMESTAMP:
                 $variableType = "\Carbon\Carbon";
                 break;
         }
