@@ -109,6 +109,11 @@ abstract class Resource {
         return $this->getFieldsVar("column_unique");
     }
 
+    public function primary() : array
+    {
+        return $this->getFieldsVar("column_primary_key");
+    }
+
     public function getDependency()
     {
         return $this->getFieldsVar("column_foreign_key","column_foreign_key");
