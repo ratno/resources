@@ -20,14 +20,14 @@ if(!function_exists("tab")) {
             if($idx == 0) {
                 return "";
             } else {
-                return str_repeat("\t",$n);
+                return str_repeat(" ",($n*4));
             }
         }
     }
 }
 
 if(!function_exists("uniform_tab")) {
-    function uniform_tab($arrayOrString, $uniform_tab_number)
+    function uniform_tab($arrayOrString, $uniform_tab_number,$debug = false)
     {
         if(is_array($arrayOrString)) {
             $array = $arrayOrString;
@@ -39,11 +39,20 @@ if(!function_exists("uniform_tab")) {
         $idx = 0;
         if(is_array($array)) {
             foreach($array as $line) {
+                if($debug) echo $line;
                 if($uniform_tab_number < 0) {
-                    $out[] = preg_replace("/".str_repeat('\s',abs($uniform_tab_number)*4)."/","",$line,1);
+                    $pattern = "/".str_repeat('\s',abs($uniform_tab_number)*4)."/";
+                    $out[] = preg_replace($pattern,"",$line,1);
                 } else {
                     $out[] = tab($uniform_tab_number,$idx++) . $line;
                 }
+            }
+        }
+
+        if(count($out)) {
+            $last_index = count($out)-1;
+            if(trim($out[$last_index]) == ""){
+                unset($out[$last_index]);
             }
         }
 
