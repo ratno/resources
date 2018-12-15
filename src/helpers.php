@@ -27,12 +27,20 @@ if(!function_exists("tab")) {
 }
 
 if(!function_exists("uniform_tab")) {
-    function uniform_tab($arrayOrString, $uniform_tab_number,$debug = false)
+    function uniform_tab($arrayOrString, $uniform_tab_number,$removeFirstEmptyLine = false, $debug = false)
     {
         if(is_array($arrayOrString)) {
             $array = $arrayOrString;
         } else {
             $array = explode("\n",$arrayOrString);
+        }
+
+        if(count($array)>1 && $removeFirstEmptyLine) {
+            // remove first empty line
+            if(trim($array[0]) == "") {
+                $array[1] = $array[0] . trim($array[1]);
+                unset($array[0]);
+            }
         }
 
         $out = [];
