@@ -27,7 +27,7 @@ if(!function_exists("tab")) {
 }
 
 if(!function_exists("uniform_tab")) {
-    function uniform_tab($arrayOrString, $uniform_tab_number,$removeFirstEmptyLine = false, $debug = false)
+    function uniform_tab($arrayOrString, $uniform_tab_number,$removeFirstEmptyLine = false, $idx_init = 0, $debug = false)
     {
         if(is_array($arrayOrString)) {
             $array = $arrayOrString;
@@ -44,7 +44,7 @@ if(!function_exists("uniform_tab")) {
         }
 
         $out = [];
-        $idx = 0;
+        $idx = $idx_init;
         if(is_array($array)) {
             foreach($array as $line) {
                 if($debug) echo $line;
