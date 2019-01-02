@@ -67,3 +67,36 @@ if(!function_exists("uniform_tab")) {
         return implode("\n",$out);
     }
 }
+
+if (!function_exists('prepare_file_column_save')) {
+    function prepare_file_column_save($value)
+    {
+        $out = [];
+        if(count($value)) {
+            foreach($value as $item) {
+                $item['url'] = substr($item['url'],stripos($item['url'],"api/upload"));
+                $out[] = $item;
+            }
+        }
+        return json_encode($out);
+    }
+}
+
+if (!function_exists('prepare_file_column_read')) {
+    function prepare_file_column_read($value)
+    {
+        $array = json_decode($value,true);
+        $out = [];
+        if($array) {
+            foreach ($array as $item) {
+                // check kalau urlnya
+                if(preg_match("/(api\/upload)/",$item['url'])) {
+                    $item['url'] = request()->getSchemeAndHttpHost() . "/" . $item['url'];
+                }
+
+                $out[] = $item;
+            }
+        }
+        return $out;
+    }
+}
