@@ -33,6 +33,10 @@ abstract class Resource {
     {
         $fields = $this->fields();
 
+        if($this->rememberToken()) {
+            $fields = array_merge($fields, $this->getRememberTokenFields());
+        }
+
         if($this->timestamps()) {
             $fields = array_merge($fields, $this->getTimestampsFields());
         }
@@ -46,6 +50,13 @@ abstract class Resource {
         }
 
         return $fields;
+    }
+
+    protected function getRememberTokenFields() : array
+    {
+        return [
+            ResourceConstant::REMEMBER_TOKEN => col()->string(100)->title('Remember Token')
+        ];
     }
 
     protected function getTimestampsFields() : array
@@ -131,6 +142,11 @@ abstract class Resource {
     public function timestamps() : bool
     {
         return true;
+    }
+
+    public function rememberToken() : bool
+    {
+        return false;
     }
 
     public function softdelete() : bool

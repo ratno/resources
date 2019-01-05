@@ -25,4 +25,6 @@ class ResourceConstant
     const UPDATED_BY_ID = "updated_by_id";
     const DELETED_BY_ID = "deleted_by_id";
     const RESTORED_BY_ID = "restored_by_id";
+
+    const REMEMBER_TOKEN = "remember_token";
 }
