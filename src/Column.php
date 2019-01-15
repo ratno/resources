@@ -201,7 +201,7 @@ class Column
     public function uuid() : Column
     {
         $this->column_uuid = true;
-        return $this->char(36)->required()->unique()->grid_hide()->form_hide();
+        return $this->char(36)->title('UUID')->required()->unique()->grid_hide()->form_hide();
     }
 
     public function unsigned() : Column
