@@ -194,8 +194,8 @@ class Column
     public function id() : Column
     {
         $this->column_id = true;
-
-        return $this->model_hide()->grid_hide()->form_hide()->detail_hide();
+        // sementara ini blom support untuk fully pakai uuid, seperti pada dropdown dll, maka model_hide() belom bisa diimplementasikan
+        return $this->grid_hide()->form_hide()->detail_hide();
     }
 
     public function uuid() : Column
