@@ -633,12 +633,18 @@ class Column
 
         $field_definition = $this->toLaravelFieldDefinition($column_name);
         if($field_definition) {
-            $return[] = $field_definition;
+            $return[] = [
+                "up" => $field_definition,
+                "down" => '$table->'."dropColumn('$column_name')",
+            ];
         }
 
         $foreignkey_definition = $this->toLaravelForeignKey($column_name);
         if($foreignkey_definition) {
-            $return[] = $foreignkey_definition;
+            $return[] = [
+                "up" => $foreignkey_definition,
+                "down" => '$table->'."dropForeign(['$column_name'])",
+            ];
         }
 
         return $return;
