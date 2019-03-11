@@ -3,13 +3,100 @@
 namespace Ratno\Resources;
 
 abstract class Resource {
+    const _TIMESTAMPS = 'timestamps';
+    const _TIMESTAMPS_ACTOR = 'timestamps_actor';
+    const _REMEMBER_TOKEN = 'remember_token';
+    const _SOFT_DELETE = 'soft_delete';
+    const _SOFT_DELETE_ACTOR = 'soft_delete_actor';
+
+    protected $allFields;
+    protected $timestamps = false;
+    protected $rememberToken = false;
+    protected $softdelete = false;
+    protected $timestampActor = false;
+    protected $softDeleteActor = false;
 
     abstract public function tablename() : string;
+
+    public function __construct()
+    {
+        $this->populateFields();
+    }
+
+    public function resetAllProperties()
+    {
+        $this->allFields = [];
+
+        $this->rememberToken = false;
+
+        $this->timestamps = false;
+        $this->timestampActor = false;
+
+        $this->softdelete = false;
+        $this->softDeleteActor = false;
+    }
+
+    public function populateFields()
+    {
+        $this->resetAllProperties();
+
+        $allFields = [];
+        $fields = $this->fields();
+        foreach($this->changelog() as $create_ts => $item_field_array) {
+            foreach($item_field_array as $item_field_name) {
+                if(array_key_exists($item_field_name,$fields)) {
+                    $allFields[$item_field_name] = $fields[$item_field_name];
+                } else {
+                    // set properties
+                    $properties = camel_case($item_field_name);
+                    $this->{$properties} = true;
+                    // ambil method get{$item_field_name}Fields()
+                    $method = "get".studly_case($item_field_name)."Fields";
+                    foreach($this->$method() as $item_field_predefined_column => $item_field_predefined_definition) {
+                        $allFields[$item_field_predefined_column] = $item_field_predefined_definition;
+                    }
+                }
+            }
+        }
+
+        $this->allFields = $allFields;
+    }
+
+
+    public function getMigrationInstance() {
+        $return = [];
+        $fields = $this->fields();
+        foreach($this->changelog() as $create_ts => $item_field_array) {
+            $clone = clone $this;
+            $clone->resetAllProperties();
+            $allFields = [];
+            foreach($item_field_array as $item_field_name) {
+                if(array_key_exists($item_field_name,$fields)) {
+                    $allFields[$item_field_name] = $fields[$item_field_name];
+                } else {
+                    // set properties
+                    $properties = camel_case($item_field_name);
+                    $clone->{$properties} = true;
+                    // ambil method get{$item_field_name}()
+                    $method = "get".studly_case($item_field_name)."Fields";
+                    foreach($clone->$method() as $item_field_predefined_column => $item_field_predefined_definition) {
+                        $allFields[$item_field_predefined_column] = $item_field_predefined_definition;
+                    }
+                }
+            }
+            $clone->allFields = $allFields;
+
+            $return[$create_ts] = $clone;
+        }
+
+        return $return;
+    }
 
     /**
      * @return \Ratno\Resources\Column[]
      */
     abstract public function fields() : array;
+    abstract public function changelog() : array;
 
     public function title() : string
     {
@@ -31,35 +118,17 @@ abstract class Resource {
      */
     public function getAllFields() : array
     {
-        $fields = $this->fields();
-
-        if($this->rememberToken()) {
-            $fields = array_merge($fields, $this->getRememberTokenFields());
-        }
-
-        if($this->timestamps()) {
-            $fields = array_merge($fields, $this->getTimestampsFields());
-        }
-
-        if($this->softdelete()) {
-            $fields = array_merge($fields, $this->getSoftdeleteFields());
-        }
-
-        if($this->saveactor()) {
-            $fields = array_merge($fields, $this->getSaveActorFields());
-        }
-
-        return $fields;
+        return $this->allFields;
     }
 
-    protected function getRememberTokenFields() : array
+    public function getRememberTokenFields() : array
     {
         return [
-            ResourceConstant::REMEMBER_TOKEN => col()->string(100)->title('Remember Token')->model_hide()->form_hide()->detail_hide()->filter_hide()->grid_hide()
+            ResourceConstant::REMEMBER_TOKEN => col()->string(100)->title('Remember Token')
         ];
     }
 
-    protected function getTimestampsFields() : array
+    public function getTimestampsFields() : array
     {
         return [
             ResourceConstant::CREATED_AT => col()->timestamp(),
@@ -67,29 +136,27 @@ abstract class Resource {
         ];
     }
 
-    protected function getSoftdeleteFields() : array
+    public function getSoftdeleteFields() : array
     {
         return [
             ResourceConstant::DELETED_AT => col()->timestamp(),
         ];
     }
 
-    public function getSaveActorFields() : array
+    public function getTimestampsActorFields() : array
     {
-        $fields = [];
-
-        if($this->timestamps()) {
-            $fields[ResourceConstant::CREATED_BY_ID] = col()->int(11)->index()->foreignKey($this->actorclass())->title('Created By');
-            $fields[ResourceConstant::UPDATED_BY_ID] = col()->int(11)->index()->foreignKey($this->actorclass())->title('Updated By');
-        }
-
-        if($this->softdelete()) {
-            $fields[ResourceConstant::DELETED_BY_ID] = col()->int(11)->index()->foreignKey($this->actorclass())->title('Deleted By');
-            $fields[ResourceConstant::RESTORED_AT] = col()->timestamp();
-            $fields[ResourceConstant::RESTORED_BY_ID] = col()->int(11)->index()->foreignKey($this->actorclass())->title('Restored By');
-        }
-
-        return $fields;
+        return [
+            ResourceConstant::CREATED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Created By'),
+            ResourceConstant::UPDATED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Updated By')
+        ];
+    }
+    public function getSoftdeleteActorFields() : array
+    {
+        return [
+            ResourceConstant::DELETED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Deleted By'),
+            ResourceConstant::RESTORED_AT => col()->timestamp(),
+            ResourceConstant::RESTORED_BY_ID => col()->int(11)->index()->foreignKey($this->actorclass())->title('Restored By'),
+        ];
     }
 
     public function getFieldsVar($varname,$value_return="key") : array
@@ -141,22 +208,27 @@ abstract class Resource {
 
     public function timestamps() : bool
     {
-        return true;
+        return $this->timestamps;
     }
 
     public function rememberToken() : bool
     {
-        return false;
+        return $this->rememberToken;
     }
 
     public function softdelete() : bool
     {
-        return false;
+        return $this->softdelete;
     }
 
-    public function saveactor() : bool
+    public function timestampActor() : bool
     {
-        return false;
+        return $this->timestampActor;
+    }
+
+    public function softDeleteActor() : bool
+    {
+        return $this->softDeleteActor;
     }
 
     public function insertdata() : array
