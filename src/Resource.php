@@ -77,11 +77,8 @@ abstract class Resource {
                     // set properties
                     $properties = camel_case($item_field_name);
                     $clone->{$properties} = true;
-                    // ambil method get{$item_field_name}()
-                    $method = "get".studly_case($item_field_name)."Fields";
-                    foreach($clone->$method() as $item_field_predefined_column => $item_field_predefined_definition) {
-                        $allFields[$item_field_predefined_column] = $item_field_predefined_definition;
-                    }
+                    // ga perlu ambil method get{$item_field_name}Fields()
+                    // karena yg akan di generate hanya yg didefinisikan di field saja
                 }
             }
             $clone->allFields = $allFields;
