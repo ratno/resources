@@ -121,7 +121,7 @@ abstract class Resource {
     public function getRememberTokenFields() : array
     {
         return [
-            ResourceConstant::REMEMBER_TOKEN => col()->string(100)->title('Remember Token')
+            ResourceConstant::REMEMBER_TOKEN => col()->string(100)->title('Remember Token')->model_hide()->form_hide()->grid_hide()->filter_hide()->detail_hide()
         ];
     }
 
