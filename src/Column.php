@@ -34,8 +34,8 @@ class Column
     public $column_file_type;
     public $column_avatar;
 
-    public $column_chain_to;
-    public $column_chain_from;
+    public $column_chain_to = [];
+    public $column_chain_from = [];
 
     public $column_filter_visible = true;
     public $column_grid_visible = true;
