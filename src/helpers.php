@@ -20,7 +20,7 @@ if(!function_exists("tab")) {
             if($idx == 0) {
                 return "";
             } else {
-                return str_repeat(" ",($n*4));
+                return str_repeat(" ",(int)($n*4));
             }
         }
     }
