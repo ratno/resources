@@ -134,7 +134,7 @@ class Column
 
     public function time() : Column
     {
-        $this->cast = "timestamp";
+        $this->cast = "time";
         return $this->dataType(Column::TYPE_TIME);
     }
 
