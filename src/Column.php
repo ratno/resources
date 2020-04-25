@@ -146,6 +146,7 @@ class Column
 
     public function decimal($size, $scale = 0) : Column
     {
+        $this->cast = ($scale) ? "decimal:$scale" : "decimal";
         return $this->dataType("decimal", $size, $scale);
     }
 
@@ -158,6 +159,7 @@ class Column
 
     public function bigIncrement() : Column
     {
+        $this->cast = "integer";
         return $this->increment(true);
     }
 
@@ -176,11 +178,13 @@ class Column
 
     public function bigint($size = 20) : Column
     {
+        $this->cast = "integer";
         return $this->dataType(Column::TYPE_BIGINT, $size);
     }
 
     public function int($size = 11) : Column
     {
+        $this->cast = "integer";
         return $this->dataType(Column::TYPE_INT, $size);
     }
 
