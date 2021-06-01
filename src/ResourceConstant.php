@@ -11,7 +11,15 @@ namespace Ratno\Resources;
 
 class ResourceConstant
 {
+    const HAS_ONE = "hasOne";
+    const HAS_MANY = "hasMany";
+    const HAS_ONE_THROUGH = "hasOneThrough";
+    const HAS_MANY_THROUGH = "hasManyThrough";
+    const BELONGS_TO = "belongsTo";
+    const BELONGS_TO_MANY = "belongsToMany";
+
     const MORPH_MANY = "morphMany";
+    const MORPH_ONE = "morphOne";
     const MORPH_TO = "morphTo";
     const MORPH_TO_MANY = "morphToMany";
     const MORPHED_BY_MANY = "morphedByMany";
