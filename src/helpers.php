@@ -50,13 +50,21 @@ if(!function_exists("uniform_tab")) {
         $out = [];
         $idx = $idx_init;
         if(is_array($array)) {
-            foreach($array as $line) {
+            foreach($array as $idx_line => $line) {
                 if($debug) echo $line;
                 if($uniform_tab_number < 0) {
                     $pattern = "/".str_repeat('\s',abs($uniform_tab_number)*4)."/";
                     $out[] = preg_replace($pattern,"",$line,1);
                 } else {
-                    $out[] = tab($uniform_tab_number,$idx++) . $line;
+                    // klo line 0 di trim, atau sebetulnya kosong dan diberi empty maka code ga bener tab nya
+                    // jadi untuk line 0 skip di trim
+                    // klo kosong maka ga perlu dikasih tab juga
+                    // untuk baris lainnya akan di trim bagian kanan
+                    if(trim($line) == "" && $idx_line > 0) {
+                        $out[] = "";
+                    } else {
+                        $out[] = tab($uniform_tab_number,$idx++) . rtrim($line);
+                    }
                 }
             }
         }
