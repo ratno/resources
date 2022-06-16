@@ -17,6 +17,7 @@ abstract class Resource {
     protected $softDeleteActor = false;
 
     abstract public function tablename() : string;
+    abstract public function tabletitle() : string;
 
     public function __construct()
     {
