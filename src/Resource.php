@@ -8,6 +8,7 @@ abstract class Resource {
     const _REMEMBER_TOKEN = 'remember_token';
     const _SOFT_DELETE = 'soft_delete';
     const _SOFT_DELETE_ACTOR = 'soft_delete_actor';
+    const TABLENAME;
     const TABLETITLE;
 
     protected $allFields;
@@ -21,7 +22,7 @@ abstract class Resource {
     public function tabletitle() : string
     {
         if(static::TABLETITLE == "") {
-            return ucwords(str_replace("_"," ",static::TABLETITLE));
+            return ucwords(str_replace("_"," ",static::TABLENAME));
         } else {
             return static::TABLETITLE;
         }
