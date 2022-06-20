@@ -44,6 +44,7 @@ class Column
     public $column_form_visible = true;
     public $column_detail_visible = true;
     public $column_model_visible = true;
+    public $column_without_model_via = false;
 
     public $column_max_length;
     public $column_min_length;
@@ -408,6 +409,12 @@ class Column
         return $this->max_length(30)->model_hide()->detail_hide()->grid_hide();
     }
 
+    public function without_model_via(array $reference_column) : Column
+    {
+        $this->column_without_model_via = $reference_column;
+        return $this;
+    }
+
     public function toArray()
     {
         $clone = (array)$this;
@@ -626,6 +633,13 @@ class Column
         }
         if($this->column_password) {
             $return[] = "password()";
+        }
+        if($this->column_without_model_via) {
+            $str_without_model_via = [];
+            foreach($this->column_without_model_via as $item_without_model_via) {
+                $str_without_model_via[] = "self::" . strtoupper($item_without_model_via);
+            }
+            $return[] = "without_model_via([".implode(",",$str_without_model_via)."])";
         }
 
         return implode("->",$return);
