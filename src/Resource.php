@@ -8,8 +8,8 @@ abstract class Resource {
     const _REMEMBER_TOKEN = 'remember_token';
     const _SOFT_DELETE = 'soft_delete';
     const _SOFT_DELETE_ACTOR = 'soft_delete_actor';
-    const TABLENAME;
-    const TABLETITLE;
+    const TABLENAME = "";
+    const TABLETITLE = "";
 
     protected $allFields;
     protected $timestamps = false;
