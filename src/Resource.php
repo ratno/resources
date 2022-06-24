@@ -275,4 +275,9 @@ abstract class Resource {
             return compact("type","column_type_name", "reference");
         }
     }
+
+    public function initial_seeder() : array
+    {
+        return [];
+    }
 }
