@@ -36,6 +36,8 @@ class Column
 
     public $column_chain_to = [];
     public $column_chain_from = [];
+    public $column_chain_to_where = [];
+    public $column_chain_from_where = [];
 
     public $column_filter_visible = true;
     public $column_grid_visible = true;
@@ -298,6 +300,20 @@ class Column
     public function chain_from(array $chain_from) : Column
     {
         $this->column_chain_from = $chain_from;
+        return $this;
+    }
+
+    public function chain_to_where(array $chain_to_where) : Column
+    {
+        $this->column_chain_to_where = $chain_to_where;
+        $this->column_chain_to = array_keys($chain_to_where);
+        return $this;
+    }
+
+    public function chain_from_where(array $chain_from_where) : Column
+    {
+        $this->column_chain_from_where = $chain_from_where;
+        $this->column_chain_from = array_keys($chain_from_where);
         return $this;
     }
 
