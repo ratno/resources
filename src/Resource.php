@@ -280,4 +280,41 @@ abstract class Resource {
     {
         return [];
     }
+
+    public function getCustomPolicy() : array
+    {
+        /* Contoh:
+         * return [
+         *     "policyName" => [
+         *         "title" => "policy title",
+         *         "params_type" => 1/2
+         *     ]
+         * ];
+         */
+
+        return [];
+    }
+
+    public function getActionList() : array
+    {
+        /*
+         * return [
+         *     [
+         *         "type" => 1/2, => 1 untuk independent, 2 untuk bulk
+         *         "policy" => "policyName",
+         *         "action"=>"action_method",
+         *         "title"=>"action title",
+         *     ],
+         *     [
+         *         "type" => 1/2, => 1 untuk independent, 2 untuk bulk
+         *         "policy" => "policyName",
+         *         "action" => "openDialogModal",
+         *         "title" => "Set Parent Menu",
+         *         "class" => \App\Http\Livewire\Actions\AppMenu\SetParentMenu::class
+         *     ]
+         * ];
+         */
+
+        return [];
+    }
 }
