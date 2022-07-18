@@ -97,7 +97,7 @@ class Column
         return $this;
     }
 
-    public function char($size = 191) : Column
+    public function char($size = 255) : Column
     {
         return $this->dataType(Column::TYPE_CHAR, $size);
     }
@@ -107,12 +107,12 @@ class Column
         return $this->dataType(Column::TYPE_TEXT);
     }
 
-    public function string($size = 191) : Column
+    public function string($size = 255) : Column
     {
         return $this->varchar($size);
     }
 
-    public function varchar($size = 191) : Column
+    public function varchar($size = 255) : Column
     {
         return $this->dataType(Column::TYPE_VARCHAR, $size);
     }
@@ -467,10 +467,10 @@ class Column
         // data type
         switch ($this->type) {
             case "char":
-                $return[] = "char(". ($this->size ?: 191).")";
+                $return[] = "char(". ($this->size ?: 255).")";
                 break;
             case "varchar":
-                $return[] = "string(". ($this->size ?: 191).")";
+                $return[] = "string(". ($this->size ?: 255).")";
                 break;
             case "text":
                 if($this->column_json && $this->cast == "array") {
@@ -700,10 +700,10 @@ class Column
         // data type
         switch ($this->type) {
             case "char":
-                $return[] = "char('$column_name',". ($this->size ?: 191).")";
+                $return[] = "char('$column_name',". ($this->size ?: 255).")";
                 break;
             case "varchar":
-                $return[] = "string('$column_name',". ($this->size ?: 191).")";
+                $return[] = "string('$column_name',". ($this->size ?: 255).")";
                 break;
             case "text":
                 if($this->column_json && $this->cast == "array") {
