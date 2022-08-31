@@ -317,4 +317,9 @@ abstract class Resource {
 
         return [];
     }
+
+    public function isEnumeration() : bool
+    {
+        return false;
+    }
 }
