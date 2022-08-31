@@ -425,6 +425,11 @@ class Column
         return $this->max_length(30)->model_hide()->detail_hide()->grid_hide();
     }
 
+    public function nestedSetLftRgt() : Column
+    {
+        return $this->bigint()->form_hide()->detail_hide()->grid_hide()->filter_hide()->model_hide()->index();
+    }
+
     public function without_model_via(array $reference_column) : Column
     {
         $this->column_without_model_via = $reference_column;
