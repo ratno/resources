@@ -69,7 +69,18 @@ abstract class Resource {
             }
         }
 
-        $this->allFields = $allFields;
+        // urutan sesuai fields
+        $this->allFields = [];
+        foreach ($fields as $ordered_field_name => $field_data) {
+            if(array_key_exists($ordered_field_name,$allFields)) {
+                $this->allFields[$ordered_field_name] = $allFields[$ordered_field_name];
+                unset($allFields[$ordered_field_name]);
+            }
+        }
+        // render sisa di allFields
+        foreach($allFields as $field_name => $field_data) {
+            $this->allFields[$field_name] = $allFields[$field_name];
+        }
     }
 
 
