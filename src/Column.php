@@ -60,6 +60,7 @@ class Column
     public $column_radio = false;
     public $column_password = false;
     public $column_json = false;
+    public $column_bulk_edit = false;
 
     const TYPE_CHAR = "char";
     const TYPE_VARCHAR = "varchar";
@@ -428,6 +429,17 @@ class Column
     public function nestedSetLftRgt() : Column
     {
         return $this->bigint()->form_hide()->detail_hide()->grid_hide()->filter_hide()->model_hide()->index();
+    }
+
+    public function nested_set_lft_rgt() : Column
+    {
+        return $this->nestedSetLftRgt();
+    }
+
+    public function bulk_edit() : Column
+    {
+        $this->column_bulk_edit = true;
+        return $this;
     }
 
     public function without_model_via(array $reference_column) : Column
