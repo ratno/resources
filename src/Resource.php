@@ -333,4 +333,15 @@ abstract class Resource {
     {
         return false;
     }
+
+    public function isNestedSet() : bool
+    {
+        $return = false;
+        foreach ($this->getAllFields() as $field_name => $field_data) {
+            if(in_array($field_name,["lft","rgt","_lft","_rgt"])) {
+                $return = true;
+            }
+        }
+        return $return;
+    }
 }
